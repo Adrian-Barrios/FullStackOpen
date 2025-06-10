@@ -16,7 +16,10 @@ const Button = ({onClick, text}) => {
 
 const StaticLine = ({text, value}) => {
   return(
-    <p>{text} {value}</p>
+    <tr>
+      <td>{text}</td>
+      <td>{value}</td>
+    </tr>
   )
 }
 
@@ -28,12 +31,16 @@ const Statistics = ({ good, neutral, bad, all, average, positive }) => {
   }
   return(
     <div>
+      <table>
+        <tbody>
       <StaticLine text={'good'} value={good}/>
       <StaticLine text={'neutral'} value={neutral}/>
       <StaticLine text={'bad'} value={bad}/>
       <StaticLine text={'all'} value={all}/>
       <StaticLine text={'average'} value={all === 0 ? 0 : average.toFixed(2)}/>
       <StaticLine text={'positive'} value={all === 0 ? 0 : (good / all * 100).toFixed(1) + ' %'}/>
+      </tbody>
+      </table>
     </div>
   )
 }
