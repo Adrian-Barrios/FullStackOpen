@@ -1,34 +1,58 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const Header = ({ text }) => {
+  return (
+    <h1>{text}</h1>
+  )
+}
+
+const Button = ({onClick, text}) => {
+  return (
+    <div>
+      <button onClick={onClick}>{text}</button>
+    </div>
+  )
+}
+
+const Display = ({ good, neutral, bad }) => {
+  return(
+    <div>
+      <p>good {good}</p>
+      <p>neutral {neutral}</p>
+      <p>bad {bad}</p>
+    </div>
+  )
+}
+
+const App = () => {
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+
+  const handleGood = () => {
+    const newGood = good + 1
+    setGood(newGood)
+  }
+  const handleNeutral = () => {
+    const newNeutral = neutral + 1
+    setNeutral(newNeutral)
+  }
+  const handleBad = () => {
+    const newBad = bad + 1
+    setBad(newBad)
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div>
+      <Header text={'give feedback'}/>
+      <div style={{ display: 'flex', gap: '5px' }}>
+      <Button onClick={handleGood} text={'good'}/>
+      <Button onClick={handleNeutral} text={'neutral'}/>
+      <Button onClick={handleBad} text={'bad'}/>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      <Header text={'statistics'}/>
+      <Display good={good} neutral={neutral} bad={bad}/>
+    </div>
   )
 }
 
