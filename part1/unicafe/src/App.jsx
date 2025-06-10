@@ -14,6 +14,12 @@ const Button = ({onClick, text}) => {
   )
 }
 
+const StaticLine = ({text, value}) => {
+  return(
+    <p>{text} {value}</p>
+  )
+}
+
 const Statistics = ({ good, neutral, bad, all, average, positive }) => {
   if (all === 0) {
     return(
@@ -22,12 +28,12 @@ const Statistics = ({ good, neutral, bad, all, average, positive }) => {
   }
   return(
     <div>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {all}</p>
-      <p>average {all === 0 ? 0 : average.toFixed(2)}</p>
-      <p>positive {all === 0 ? 0 : (good / all * 100).toFixed(1)} %</p>
+      <StaticLine text={'good'} value={good}/>
+      <StaticLine text={'neutral'} value={neutral}/>
+      <StaticLine text={'bad'} value={bad}/>
+      <StaticLine text={'all'} value={all}/>
+      <StaticLine text={'average'} value={all === 0 ? 0 : average.toFixed(2)}/>
+      <StaticLine text={'positive'} value={all === 0 ? 0 : (good / all * 100).toFixed(1) + ' %'}/>
     </div>
   )
 }
