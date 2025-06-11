@@ -29,19 +29,23 @@ const Sum = ({parts}) => {
   )
 }
 
-const Course = ({course}) => {
+const Courses = ({courses}) => {
   return(
     <div>
-    <Header course={course.name} />
-    <Content parts={course.parts}/>
-    <Sum parts={course.parts}/>
+      {courses.map(course => (
+        <div key={course.id}>
+          <Header course={course.name} />
+          <Content parts={course.parts} />
+          <Sum parts={course.parts} />
+        </div>
+      ))}
     </div>
   )
 
 }
 
 const App = () => {
-  const course = {
+  const courses = [{
     id: 1,
     name: 'Half Stack application development',
     parts: [
@@ -66,9 +70,25 @@ const App = () => {
         id: 4
       }
     ]
-  }
+  },
+  {
+    id: 2,
+    name: 'Node.js',
+    parts: [
+      {
+        name: 'Routing',
+        exercises: 3,
+        id: 1
+      },
+      {
+        name: 'Middlewares',
+        exercises: 7,
+        id: 2
+      }
+    ]
+  }]
 
-  return <Course course={course}/>
+  return <Courses courses={courses}/>
 }
 
 export default App
