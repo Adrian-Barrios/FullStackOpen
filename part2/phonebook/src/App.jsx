@@ -74,9 +74,6 @@ const App = () => {
     setFilter(event.target.value)
   }
 
-  const filteredPersons = persons.filter(person =>
-    person.name.toLowerCase().includes(filter.toLowerCase())
-  )
 
   return (
     <div>
