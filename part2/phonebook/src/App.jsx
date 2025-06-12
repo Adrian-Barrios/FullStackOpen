@@ -1,4 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+
+
+
+
 
 const Filter = ({ filter, handleFilterChange }) => {
   return (
@@ -47,6 +52,14 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+
+  const promise = axios.get('http://localhost:3001/persons')
+
+useEffect(() => {
+  promise.then(response => {
+    console.log(response.data)
+  })
+},[])
 
   const handleAddEntry = (event) => {
     event.preventDefault()
