@@ -95,9 +95,21 @@ const App = () => {
   }
 
   const deleteButton = (id, persons, setPersons) => {
-    phonebookService.eliminate(id)
-    const newPersons = persons.filter(person => person.id !== id)
-    setPersons(newPersons)
+    const confirmDelete = confirm(`Delete ${persons.find(person => person.id === id).name}?`);
+    if (confirmDelete) {
+      phonebookService
+        .eliminate(id)
+        .then(() => {
+          console.log(`Deleted person with id ${id}`);
+          const newPersons = persons.filter(person => person.id !== id)
+          setPersons(newPersons);
+        })
+        .catch(error => {
+          console.error('Error deleting person:', error)
+        })
+
+    }
+
   }
 
 
