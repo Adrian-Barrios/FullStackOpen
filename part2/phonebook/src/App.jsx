@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import phonebookService from './services/phonebook.js'
 
 const Filter = ({ filter, handleFilterChange }) => {
   return (
@@ -49,6 +49,17 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
 
+  useEffect(() => {
+    phonebookService
+      .getAll()
+      .then(response => {
+        setPersons(response)
+      })
+      .catch(error => {
+        console.error('Error fetching persons:', error)
+      })
+  }, [])
+
   const handleAddEntry = (event) => {
     event.preventDefault()
     if (persons.some(person => person.name === newName)) {
@@ -59,6 +70,13 @@ const App = () => {
       return
     }
       setPersons([...persons, { name: newName, number: newNumber }])
+      phonebookService.create({ name: newName, number: newNumber })
+        .then(response => {
+          console.log('Added:', response)
+        })
+        .catch(error => {
+          console.error('Error adding person:', error)
+        })
       setNewName('')
       setNewNumber('')
   }
