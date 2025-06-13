@@ -25,20 +25,6 @@ const PersonForm = ({ newName, newNumber, handleAddEntry, handleNameChange, hand
   )
 }
 
-const Persons = ({ persons, filter }) => {
-  const filteredPersons = persons.filter(person =>
-    person.name.toLowerCase().includes(filter.toLowerCase())
-  )
-
-  return (
-    <ul>
-      {filteredPersons.map(person => (
-        <li key={person.name}>{person.name} {person.number}</li>
-      ))}
-    </ul>
-  )
-}
-
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arturo Hellas',
@@ -48,6 +34,21 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+
+  const Persons = ({ persons, filter }) => {
+    const filteredPersons = persons.filter(person =>
+      person.name.toLowerCase().includes(filter.toLowerCase())
+    )
+  
+    return (
+      <ul>
+        {filteredPersons.map(person => (
+          <li key={person.name}>{person.name} {person.number} {  <button onClick={() => deleteButton(person.id, persons, setPersons)}>delete</button>}</li> 
+        ))}
+  
+      </ul>
+    )
+  }
 
   useEffect(() => {
     phonebookService
@@ -91,6 +92,12 @@ const App = () => {
 
   const handleFilterChange = (event) => {
     setFilter(event.target.value)
+  }
+
+  const deleteButton = (id, persons, setPersons) => {
+    phonebookService.eliminate(id)
+    const newPersons = persons.filter(person => person.id !== id)
+    setPersons(newPersons)
   }
 
 
