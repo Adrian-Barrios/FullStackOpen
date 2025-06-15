@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import phonebookService from './services/phonebook.js'
+import './index.css'
 
 const Filter = ({ filter, handleFilterChange }) => {
   return (
@@ -25,6 +26,17 @@ const PersonForm = ({ newName, newNumber, handleAddEntry, handleNameChange, hand
   )
 }
 
+const Alert = ({ message }) => {
+  if (!message) {
+    return null
+  } else {
+    return (
+      <div className="popup">
+        {message}
+      </div>
+    )
+  }}
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arturo Hellas',
@@ -34,6 +46,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [alertMessage, setAlertMessage] = useState(null)
 
   const Persons = ({ persons, filter }) => {
     const filteredPersons = persons.filter(person =>
@@ -73,7 +86,10 @@ const App = () => {
       setPersons([...persons, { name: newName, number: newNumber }])
       phonebookService.create({ name: newName, number: newNumber })
         .then(response => {
-          console.log('Added:', response)
+          setAlertMessage(`Added ${response.name}`)
+          setTimeout(() => {
+            setAlertMessage(null)
+          }, 5000)
         })
         .catch(error => {
           console.error('Error adding person:', error)
@@ -116,6 +132,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Alert message={alertMessage}/>
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
       <h2>add a New</h2>
       <PersonForm 
