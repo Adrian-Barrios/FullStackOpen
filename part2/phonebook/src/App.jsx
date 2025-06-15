@@ -76,8 +76,24 @@ const App = () => {
 
   const handleAddEntry = (event) => {
     event.preventDefault()
+    // Check if the name already exists in the phonebook
     if (persons.some(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
+      // Update the number for the existing person
+      phonebookService.update(persons.find(person => person.name === newName).id, { name: newName, number: newNumber })
+      // Update the state with the new number
+      setPersons(persons.map(person => {
+        if (person.name === newName) {
+          return { ...person, number: newNumber }
+        }
+        return person
+      }))
+      setTimeout(() => {
+        setAlertMessage(null)
+      }
+      , 5000)
+      setAlertMessage(`Updated ${newName}`)
+      setNewName('')
+      setNewNumber('')
       return
     } else if (newName === '' || newNumber === '') {
       alert('Name and number cannot be empty')
