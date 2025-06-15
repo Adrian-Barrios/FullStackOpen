@@ -3,8 +3,13 @@ import countryService from './services/countryService.js'
 
 const App = () => {
 
-
-
+  useEffect(() => {
+    countryService.getAll().then(response => {
+      console.log('Countries fetched:', response)
+    }).catch(error => {
+      console.error('Error fetching countries:', error)
+    })
+  },[])
 
   return (
     <div>
