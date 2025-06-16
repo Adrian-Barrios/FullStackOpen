@@ -7,7 +7,6 @@ app.use(express.json()); // Middleware to parse JSON bodies
 app.use(morgan('tiny')); // Using morgan to log requests in 'tiny' format
 app.use(cors()); // Enabling CORS for all routes
 
-
 var people = [
   { 
     "id": "1",
