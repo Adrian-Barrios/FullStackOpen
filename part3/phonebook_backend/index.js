@@ -1,9 +1,11 @@
 const express = require('express'); 
 const app = express();
 const morgan = require('morgan'); // Importing morgan for logging
+const cors = require('cors'); // Importing cors for handling cross-origin requests
 
 app.use(express.json()); // Middleware to parse JSON bodies
 app.use(morgan('tiny')); // Using morgan to log requests in 'tiny' format
+app.use(cors()); // Enabling CORS for all routes
 
 
 var people = [

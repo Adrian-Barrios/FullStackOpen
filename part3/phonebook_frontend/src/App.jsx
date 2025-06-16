@@ -38,11 +38,7 @@ const Alert = ({ message }) => {
   }}
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arturo Hellas',
-      number: '040-123456',
-    }
-  ]) 
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
