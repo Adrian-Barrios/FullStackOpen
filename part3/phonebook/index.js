@@ -1,7 +1,9 @@
 const express = require('express'); 
 const app = express();
 
-const people = [
+app.use(express.json()); // Middleware to parse JSON bodies
+
+var people = [
   { 
     "id": "1",
     "name": "Arto Hellas", 
@@ -55,6 +57,30 @@ app.delete('/api/persons/:id', (req, res) => {
   
   people.splice(personIndex, 1);
   res.status(204).end();
+})
+
+const generateId = () => {
+  const MaxId = people.length > 0 ? Math.max(...people.map(p => Number(p.id))) : 0;
+  return String(MaxId + 1);
+}
+
+app.post('/api/persons/', (req, res) => {
+  const id = generateId();
+  const content = req.body;
+  if (!content.name || !content.number) {
+    console.log('Name or number missing');
+    return res.status(400).json({ error: 'Name or number missing' });
+  } else if (people.some(p => p.name === content.name)) {
+    console.log('Name must be unique');
+    return res.status(400).json({ error: 'Name must be unique' });
+  }
+  const person = {
+    id: id,
+    name: content.name,
+    number: content.number
+  };
+  res.status(201).json(person);
+  people = people.concat(person);
 })
 
 PORT=3001
