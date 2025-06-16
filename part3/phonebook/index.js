@@ -1,7 +1,10 @@
 const express = require('express'); 
 const app = express();
+const morgan = require('morgan'); // Importing morgan for logging
 
 app.use(express.json()); // Middleware to parse JSON bodies
+app.use(morgan('tiny')); // Using morgan to log requests in 'tiny' format
+
 
 var people = [
   { 
