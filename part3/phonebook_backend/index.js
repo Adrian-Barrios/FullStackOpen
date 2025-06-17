@@ -31,8 +31,9 @@ var people = [
 ]
 
 app.get('/', (req, res) => {
-  res.send('<h1>Phonebook Backend: Add /api/persons to see the list in the phonebook</h1>')
-})
+  res.send('<h1>Welcome to the Phonebook API. Add /api/persons to access the phonebook</h1>');
+}
+);
 
 app.get('/api/persons', (req, res) => {
   res.json(people)
