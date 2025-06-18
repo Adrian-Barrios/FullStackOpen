@@ -9,7 +9,7 @@ primary_region = 'lhr'
 [build]
 
 [env]
-  PORT = '3001'
+  PORT = "3001"
 
 [http_service]
   internal_port = 3001
