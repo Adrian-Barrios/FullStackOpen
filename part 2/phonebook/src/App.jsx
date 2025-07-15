@@ -32,26 +32,53 @@ const App = () => {
   const handleFilterChange = (event) => {
     setFilter(event.target.value)
   }
-
-  const addEntry = (event) => {
-    event.preventDefault()
-    const nameObject = {
-      name: newName,
-      number: newNumber
-    }
-    personsService
-      .create(nameObject)
-      .then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson))
-        console.log('Person added:', returnedPerson)
-        setNewName('')
-        setNewNumber('')
-      })
-      .catch(error => {
-        console.error('Error adding person:', error)
-        alert(`Error adding person: ${error.response.data.error}`)
-      })
+// Add a new entry to the phonebook
+  // If the name already exists, update the number instead
+  // If the name or number is empty, alert the user
+  // If the entry is successfully added or updated, clear the input fields
+  // If there's an error, alert the user with the error message
+ const addEntry = (event) => {
+  event.preventDefault()
+  const nameObject = {
+    name: newName,
+    number: newNumber
   }
+  if (nameObject.name === '' || nameObject.number === '') {
+    alert('Name and number cannot be empty')
+    return
+  }
+  const existingPerson = persons.find(person => person.name === newName)
+  if (existingPerson) {
+    if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+      const updatedPerson = { ...existingPerson, number: newNumber }
+      personsService
+        .update(existingPerson.id, updatedPerson)
+        .then(returnedPerson => {
+          setPersons(persons.map(person => person.id !== existingPerson.id ? person : returnedPerson))
+          setNewName('')
+          setNewNumber('')
+          console.log('Person updated:', returnedPerson)
+        })
+        .catch(error => {
+          console.error('Error updating person:', error)
+          alert(`Error updating person: ${error.response.data.error}`)
+        })
+    }
+    return // <-- Prevent creating a duplicate!
+  }
+  personsService
+    .create(nameObject)
+    .then(returnedPerson => {
+      setPersons(persons.concat(returnedPerson))
+      setNewName('')
+      setNewNumber('')
+      console.log('Person added:', returnedPerson)
+    })
+    .catch(error => {
+      console.error('Error adding person:', error)
+      alert(`Error adding person: ${error.response.data.error}`)
+    })
+}
 
   const handleDelete = (id) => {
     if (window.confirm('Are you sure you want to delete this entry?')) {
