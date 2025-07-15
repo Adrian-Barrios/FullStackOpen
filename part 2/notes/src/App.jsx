@@ -33,10 +33,20 @@ const App = () => {
     .then(response => {
       console.log(response)
     })
+    setNotes(notes.concat(noteObject))
     setNewNote('')
 }
   const notesToShow = showAll ? notes : notes.filter(note => note.important===true)
 
+const toggleImportanceOf = id => {
+  const url = `http://localhost:3001/notes/${id}`
+  const note = notes.find(n => n.id === id)
+  const changedNote = { ...note, important: !note.important }
+
+  axios.put(url, changedNote).then(response => {
+    setNotes(notes.map(note => note.id === id ? response.data : note))
+  })
+}
   const handleFilterChange = () => {
     setShowAll(!showAll)
   }
@@ -46,7 +56,7 @@ const App = () => {
       <h1>Notes</h1>
       <ul>
         {notesToShow.map(note =>
-          <Note key={note.id} note={note} />
+          <Note key={note.id} note={note} toggleImportance={()=>toggleImportanceOf(note.id)} />
         )}
       </ul>
       <form>
