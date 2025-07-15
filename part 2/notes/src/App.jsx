@@ -8,25 +8,28 @@ const App = () => {
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
 
+// Fetch initial notes from the server
   useEffect(() => {
     noteService
       .getAll()
-      .then(response => {
-        setNotes(response.data)
+      .then(initialNotes => {
+        setNotes(initialNotes)
       })
   }, [])
 
+// Toggle importance of a note
   const toggleImportanceOf = id => {
     const note = notes.find(n => n.id === id)
     const changedNote = { ...note, important: !note.important }
 
     noteService
       .update(id, changedNote)
-      .then(response => {
-        setNotes(notes.map(note => note.id === id ? response.data : note))
+      .then(returnedNote => {
+        setNotes(notes.map(note => note.id === id ? returnedNote : note))
       })
   }
-
+  
+// Add a new note
     const addNote = (event) => {
     event.preventDefault()
     const noteObject = {
@@ -36,8 +39,8 @@ const App = () => {
 
     noteService
       .create(noteObject)
-      .then(response => {
-        setNotes(notes.concat(response.data))
+      .then(retrunedNote => {
+        setNotes(notes.concat(retrunedNote))
         setNewNote('')
       })
   }
