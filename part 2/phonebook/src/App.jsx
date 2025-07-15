@@ -3,7 +3,6 @@ import Form from './components/Form.jsx'
 import Filter from './components/Filter.jsx'
 import Persons from './components/Persons.jsx'
 import axios from 'axios'
-import { use } from 'react'
 
 const App = () => {
   const [persons, setPersons] = useState([])
