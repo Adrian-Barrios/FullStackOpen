@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Form from './components/Form.jsx'
 import Filter from './components/Filter.jsx'
 import Persons from './components/Persons.jsx'
+import Notification from './components/Notification.jsx'
 import axios from 'axios'
 import personsService from './services/persons'
 
@@ -10,6 +11,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [alertMessage, setAlertMessage] = useState(null)
+  const [alertType, setAlertType] = useState(null)
 
   const hook = () => {
     axios
@@ -44,7 +47,7 @@ const App = () => {
     number: newNumber
   }
   if (nameObject.name === '' || nameObject.number === '') {
-    alert('Name and number cannot be empty')
+    alert('Name and number cannot be empty.')
     return
   }
   const existingPerson = persons.find(person => person.name === newName)
@@ -63,6 +66,13 @@ const App = () => {
           console.error('Error updating person:', error)
           alert(`Error updating person: ${error.response.data.error}`)
         })
+      setAlertMessage(`Updated ${newName}'s number`)
+      setAlertType('success')
+      setTimeout(() => {
+        setAlertMessage(null)
+        setAlertType(null)
+      }, 5000)
+      return 
     }
     return // <-- Prevent creating a duplicate!
   }
@@ -73,6 +83,12 @@ const App = () => {
       setNewName('')
       setNewNumber('')
       console.log('Person added:', returnedPerson)
+      setAlertMessage(`Added ${newName}`)
+      setAlertType('success')
+      setTimeout(() => {
+        setAlertMessage(null)
+        setAlertType(null)
+      }, 5000)
     })
     .catch(error => {
       console.error('Error adding person:', error)
@@ -101,7 +117,8 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <Notification message={alertMessage} type={alertType}/>
       <Filter filter={filter} handleFilterChange={handleFilterChange}/>
       <h1>Add a new</h1>
       <Form 
