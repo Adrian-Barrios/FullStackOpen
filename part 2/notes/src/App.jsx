@@ -1,11 +1,14 @@
 import {useState, useEffect} from 'react'
 import Note from './components/Note'
+import Notification from './components/Notification'
+import Footer from './components/Footer'
 import noteService from './services/notes'
 
 const App = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [errorMessage, setErrorMessage] = useState(null)
 
 // Fetch initial notes from the server
   useEffect(() => {
@@ -27,10 +30,13 @@ const App = () => {
         setNotes(notes.map(note => note.id === id ? returnedNote : note))
       })
       .catch(error=>{
-        alert(`The note '${note.content}' was already removed from server`)
-      })
-      setNotes(notes.filter(note => note.id !== id))
-  }
+        setErrorMessage(`Note ${note.content} was already removed from server`)
+        setTimeout(()=> {
+          setErrorMessage(null)
+        }, 5000)
+        setNotes(notes.filter(n => n.id !== id))
+        })
+      }
 
 // Add a new note
     const addNote = (event) => {
@@ -61,6 +67,7 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
+      <Notification message={errorMessage} />
       <ul>
         {notesToShow.map(note =>
           <Note key={note.id} note={note} toggleImportance={()=>toggleImportanceOf(note.id)} />
@@ -72,6 +79,7 @@ const App = () => {
       </form>
       <button onClick={handleFilterChange}>
         Show {showAll ? 'important' : 'all'}</button>
+      <Footer />
     </div>
   )
 }
