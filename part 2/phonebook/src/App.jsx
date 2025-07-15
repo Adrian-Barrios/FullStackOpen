@@ -3,6 +3,7 @@ import Form from './components/Form.jsx'
 import Filter from './components/Filter.jsx'
 import Persons from './components/Persons.jsx'
 import axios from 'axios'
+import personsService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -38,11 +39,33 @@ const App = () => {
       name: newName,
       number: newNumber
     }
-    const newPersons = persons.concat(nameObject)
-    setPersons(newPersons)
-    setNewName('')
-    setNewNumber('')
-    console.log('Added:', nameObject)
+    personsService
+      .create(nameObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        console.log('Person added:', returnedPerson)
+        setNewName('')
+        setNewNumber('')
+      })
+      .catch(error => {
+        console.error('Error adding person:', error)
+        alert(`Error adding person: ${error.response.data.error}`)
+      })
+  }
+
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this entry?')) {
+      personsService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id))
+          console.log(`Person with id ${id} deleted`)
+        })
+        .catch(error => {
+          console.error('Error deleting person:', error)
+          alert('Error deleting person. It may have already been removed.')
+        })
+    }
   }
 
   const filteredPersons = filter ? persons.filter(person =>
@@ -63,7 +86,7 @@ const App = () => {
       />
       <h2>Numbers</h2>
 
-      <Persons persons={filteredPersons}/>
+      <Persons persons={filteredPersons} handleDelete={handleDelete}/>
     </div>
   )
   

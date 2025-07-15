@@ -1,5 +1,4 @@
 import {useState, useEffect} from 'react'
-import axios from 'axios'
 import Note from './components/Note'
 import noteService from './services/notes'
 
@@ -27,8 +26,12 @@ const App = () => {
       .then(returnedNote => {
         setNotes(notes.map(note => note.id === id ? returnedNote : note))
       })
+      .catch(error=>{
+        alert(`The note '${note.content}' was already removed from server`)
+      })
+      setNotes(notes.filter(note => note.id !== id))
   }
-  
+
 // Add a new note
     const addNote = (event) => {
     event.preventDefault()
